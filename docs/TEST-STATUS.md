@@ -1,8 +1,26 @@
 # Test status
 
 The results below were recorded when each version was built. They predate this repository's split
-from the original project, and addresses and machine details were replaced with examples. Results
-from the latest build are at the top once recorded.
+from the original project, and addresses and machine details were replaced with examples.
+
+## 0.5.2 release build, 2026-10-30
+
+APK built from a fresh public clone at `1f92bec`, on the Android TV 14 (API 34) emulator, against a
+fresh public clone of the server at `9f18efe`. Placeholder TMDB and Real-Debrid keys.
+
+| Check | Result |
+|---|---|
+| Unit tests / lint | 68 passed / no errors |
+| Instrumented discovery, controlled announcement (debug build, real Android NSD) | Passed |
+| Instrumented discovery of the real server through the relay, name and port checked | Passed |
+| Wizard lists the real server (release APK, relay) | Passed |
+| Manual entry `10.0.2.2:8601` | Verified, sign-in opened |
+| Sign-in, session kept after relaunch, *Who's watching?*, profile opens | Passed |
+| Catalog | **Not tested.** The placeholder TMDB key gives "TMDB error: Unauthorized", shown cleanly |
+| Playback | **Not tested in this build** |
+| Physical TV, real multicast between devices | **Not tested** |
+
+The relay is `scripts/mdns-relay.mjs`; its header explains how to run it.
 
 ## Phase 5.1 checkpoint
 

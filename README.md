@@ -33,27 +33,28 @@ TV (this app) ──HTTP──▶ Notflix server :8420   (sign-in, profiles, cat
 
 | | |
 |---|---|
-| Downloadable APK | **None published.** Build one yourself (below). |
-| Release build | See [Releases](https://github.com/jdepew88/notflix-android-tv/releases) for what is published and how it was tested. |
-| Physical TV | **Not tested.** Testing so far was on the Android TV 14 (API 34) emulator. |
-| Current server `main` | **Not end-to-end tested.** The last end-to-end run used the server's mDNS commit, before notifications were merged. See [docs/TEST-STATUS.md](docs/TEST-STATUS.md). |
+| Downloadable APK | [**0.5.2 pre-release**](https://github.com/jdepew88/notflix-android-tv/releases), signed release build, from `v0.5.2` |
+| Tested on | Android TV 14 (API 34) emulator, against a fresh clone of the server's `main` |
+| Works in that test | `_notflix._tcp` discovery, manual address entry, sign-in, profiles |
+| **Not tested in this build** | **Catalog and playback** (the test server had placeholder keys). This build is minified, so playback must be checked separately. An earlier debug build played a title on the emulator. |
+| **Not tested at all** | **A physical TV**, and discovery across a real Wi-Fi or Ethernet network. The emulator can't receive LAN multicast, so a test relay carried it. |
+
+Details: [docs/TEST-STATUS.md](docs/TEST-STATUS.md).
 
 ## Before you start
 
-1. [Install the Notflix server](https://github.com/jdepew88/notflix-debrid#quick-start-windows) and finish its setup wizard.
-2. On the server, turn on LAN access. Automatic discovery needs multicast to reach the TV; otherwise
-   enter the address by hand.
+1. Install the Notflix server on a PC on your network, following its
+   [quick start](https://github.com/jdepew88/notflix-debrid#quick-start-windows): run `Setup-Notflix.cmd`,
+   start it with **Start Notflix**, and finish the setup wizard.
+2. On the server, turn on **LAN access** and **Let TVs find this server automatically** (Settings →
+   Server & storage). Automatic discovery needs multicast to reach the TV; otherwise enter the
+   address by hand.
 
 ## Install it on your television
 
-The debug APK is at:
-
-```
-app\build\outputs\apk\debug\app-debug.apk
-```
-
-(build it with `scripts\build.ps1`; see *Building* below). It installs next to any
-other app as **Notflix** (package `com.notflix.tv.debug`) and appears in the TV's app list.
+Download `notflix-android-tv-0.5.2.apk` from [Releases](https://github.com/jdepew88/notflix-android-tv/releases), or build it yourself (*Building* below;
+a debug build is at `app\build\outputs\apk\debug\app-debug.apk`). It appears in the TV's app list as
+**Notflix**. The commands below use the debug path; use the downloaded file instead if you have one.
 
 ### Option A — over the network with ADB (recommended)
 
@@ -271,15 +272,18 @@ builds are signed with the local debug key).
 Server-side requirements (advertisement and identity fields) are in
 [`docs/server-discovery.md`](docs/server-discovery.md). Nothing on the server was changed.
 
-## Publishing a release APK (not done yet)
+## Publishing a release APK
 
-1. Create a release keystore and keep it outside this repository (`.gitignore` blocks common key files).
-2. Add a `signingConfigs.release` that reads its values from environment variables or an untracked file.
-3. Test the minified `assembleRelease` build (R8 is on) on an emulator and a physical TV, against the current server.
-4. Attach the APK and its SHA-256 to a GitHub Release, listing the tested server commit and devices.
+1. Keep the release keystore outside this repository. `app/build.gradle.kts` reads it from
+   `~/.notflix-signing/keystore.properties` (or `NOTFLIX_SIGNING_PROPERTIES`) with `storeFile`,
+   `storePassword`, `keyAlias` and `keyPassword`. Without that file the release build is unsigned.
+2. `.\gradlew.bat testDebugUnitTest lintDebug assembleRelease`.
+3. Test the minified APK on an emulator and a physical TV, against the current server.
+4. Tag the exact tested commit and attach the APK and its SHA-256 to a GitHub Release, listing the
+   tested server commit, the devices, and anything untested.
 
-The release key cannot be replaced later without users reinstalling, so back it up. Debug and release
-builds use different application IDs and install side by side.
+Replacing the key means users must uninstall first, so back it up. Debug and release builds use
+different application IDs and install side by side.
 
 ## License and trademarks
 
