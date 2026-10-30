@@ -1,0 +1,20 @@
+.gradle/
+.kotlin/
+build/
+local.properties
+*.iml
+.idea/
+captures/
+
+# Never publish signing material, credentials or built packages
+*.keystore
+*.jks
+*.p12
+*.pfx
+keystore.properties
+signing.properties
+.env
+.env.*
+*.apk
+*.aab
+*.idsig

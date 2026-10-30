@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A Notflix server is usually reached over plain HTTP on the home network (http://<PC address>:4119),
+     at an address the user picks at run time, so it can't be listed here in advance. Cleartext is
+     therefore permitted by this file and restricted by the app: plain-HTTP requests may only go to
+     the server origin the user selected (ServerConfig.cleartextGuard). HTTPS uses the system trust
+     store with normal certificate validation; nothing here relaxes it. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
